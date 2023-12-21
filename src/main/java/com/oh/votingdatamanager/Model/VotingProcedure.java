@@ -1,33 +1,17 @@
 package com.oh.votingdatamanager.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 public class VotingProcedure {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String szavazasId;
-
-    private LocalDateTime idopont;
-
-    private String targy;
-
-    private VotingType tipus;
-
-    @ManyToOne
-    @JoinColumn(name = "elnok_id")
-    private Delegate elnok;
-
-    @OneToMany
-    private Set<Vote> szavazatok;
-
-    public VotingProcedure(LocalDateTime idopont, String targy, VotingType tipus, Delegate elnok, Set<Vote> szavazatok) {
+    public VotingProcedure(LocalDateTime idopont, String targy, String tipus, String elnok, Set<Vote> szavazatok) {
         this.idopont = idopont;
         this.targy = targy;
         this.tipus = tipus;
@@ -35,12 +19,43 @@ public class VotingProcedure {
         this.szavazatok = szavazatok;
     }
 
+
     public VotingProcedure() {
 
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String szavazasId;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    public LocalDateTime idopont;
+
+    @Column(name="TARGY", length=50, unique=false)
+    private String targy;
+
+    //@Enumerated(EnumType.STRING)
+    //private VotingType tipus;
+    private String tipus;
+
+    /*
+    @ManyToOne
+    @JoinColumn(name = "elnok_id")
+    private Delegate elnok;
+    */
+
+    private String elnok;
+
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "votingProcedure")
+    private Set<Vote> szavazatok;
+
+
     public String generateUniqueId() {
-        return "OJ" + id.toString();
+        szavazasId = UUID.randomUUID().toString();
+        return szavazasId;
     }
 
     public String getSzavazasId() {

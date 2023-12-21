@@ -9,19 +9,16 @@ public class Vote {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "delegate_id")
-    private Delegate képviselő;
+    private String kepviselo;
 
-    private VoteOption szavazat;
+    private String szavazat;
 
     @ManyToOne
-    @JoinColumn(name = "szavazás_id")
-    private VotingProcedure szavazás;
+    @JoinColumn(name = "voting_procedure_id")
+    private VotingProcedure votingProcedure;
 
-    public Vote(Long id, Delegate képviselő, VoteOption szavazat) {
-        this.id = id;
-        this.képviselő = képviselő;
+    public Vote(String kepviselo, String szavazat) {
+        this.kepviselo = kepviselo;
         this.szavazat = szavazat;
     }
 
