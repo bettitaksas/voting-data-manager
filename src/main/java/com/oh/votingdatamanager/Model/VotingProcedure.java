@@ -12,6 +12,8 @@ public class VotingProcedure {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String szavazasId;
+
     private LocalDateTime idopont;
 
     private String targy;
@@ -39,5 +41,13 @@ public class VotingProcedure {
 
     public String generateUniqueId() {
         return "OJ" + id.toString();
+    }
+
+    public String getSzavazasId() {
+        return szavazasId;
+    }
+
+    public void setSzavazasId(String szavazasId) {
+        this.szavazasId = szavazasId;
     }
 }
