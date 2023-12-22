@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class VotingProcedureService {
+
     private final VotingProcedureRepository votingProcedureRepository;
 
     @Autowired
@@ -26,5 +27,11 @@ public class VotingProcedureService {
         votingResoult.setSzavazasId(savedVoting.getSzavazasId());
 
         return votingResoult;
+    }
+
+    public void saveVotingProcedure(VotingProcedure votingProcedure) {
+        votingProcedure.setSzavazasId(votingProcedure.generateUniqueId());
+        //ellenőrzések: időpont, képviselők csak egyszer szavazzanak
+        votingProcedureRepository.save(votingProcedure);
     }
 }

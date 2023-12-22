@@ -1,9 +1,9 @@
 package com.oh.votingdatamanager.Model;
 
 public enum VotingType {
-    J("jelenlét"),
-    E("egyszerű többségi szavazás"),
-    M("minősített többségi szavazás");
+    j("jelenlét"),
+    e("egyszerű többségi szavazás"),
+    m("minősített többségi szavazás");
 
     VotingType(String nameOfVotingType) {
     }

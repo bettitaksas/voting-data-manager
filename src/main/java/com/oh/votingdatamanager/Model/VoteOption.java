@@ -1,9 +1,9 @@
 package com.oh.votingdatamanager.Model;
 
 public enum VoteOption {
-    I("igen"),
-    N("nem"),
-    T("tartózkodás");
+    i("igen"),
+    n("nem"),
+    t("tartózkodás");
 
     VoteOption(String nameOfVoteOption) {
     }

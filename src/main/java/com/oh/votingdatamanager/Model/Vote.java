@@ -1,28 +1,27 @@
 package com.oh.votingdatamanager.Model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Vote {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String kepviselo;
+    public String kepviselo;
 
-    private String szavazat;
+    public VoteOption szavazat;
 
     @ManyToOne
-    @JoinColumn(name = "voting_procedure_id")
-    private VotingProcedure votingProcedure;
+    public VotingProcedure votingProcedure;
 
-    public Vote(String kepviselo, String szavazat) {
-        this.kepviselo = kepviselo;
-        this.szavazat = szavazat;
-    }
-
-    public Vote() {
-
-    }
 }
