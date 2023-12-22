@@ -27,4 +27,11 @@ public class Vote {
     public String getKepviselo() {
         return kepviselo;
     }
+
+    public void setVotingProcedure(VotingProcedure votingProcedure) {
+        this.votingProcedure = votingProcedure;
+        if (votingProcedure != null) {
+            votingProcedure.getSzavazatok().add(this);
+        }
+    }
 }

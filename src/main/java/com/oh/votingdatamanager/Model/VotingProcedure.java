@@ -67,4 +67,9 @@ public class VotingProcedure {
         return szavazatok.stream()
                 .allMatch(szavazat -> szavazoKepviselok.add(szavazat.getKepviselo()));
     }
+
+    public void addVote(Vote vote) {
+        this.szavazatok.add(vote);
+        vote.setVotingProcedure(this);
+    }
 }

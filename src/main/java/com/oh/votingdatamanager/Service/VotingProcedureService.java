@@ -1,6 +1,7 @@
 package com.oh.votingdatamanager.Service;
 
 import com.oh.votingdatamanager.Model.Resoult;
+import com.oh.votingdatamanager.Model.Vote;
 import com.oh.votingdatamanager.Model.VotingProcedure;
 import com.oh.votingdatamanager.Repository.VotingProcedureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class VotingProcedureService {
             votingResoult.setError("A megadott időpont már foglalt.");
         } else {
             votingProcedure.setSzavazasId(votingProcedure.generateUniqueId());
+
+            for (Vote vote : votingProcedure.getSzavazatok()) {
+                votingProcedure.addVote(vote);
+            }
+
             votingProcedureRepository.save(votingProcedure);
             votingResoult.setSzavazasId(votingProcedure.generateUniqueId());
         }
