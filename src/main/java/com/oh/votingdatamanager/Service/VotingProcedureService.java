@@ -16,7 +16,7 @@ public class VotingProcedureService {
         this.votingProcedureRepository = votingProcedureRepository;
     }
 
-    public Resoult saveVotingResoult(VotingProcedure votingProcedure) {
+/*    public Resoult saveVotingResoult(VotingProcedure votingProcedure) {
         votingProcedure.setSzavazasId(votingProcedure.generateUniqueId());
 
         //ellenőrzések: időpont, képviselők csak egyszer szavazzanak
@@ -27,11 +27,14 @@ public class VotingProcedureService {
         votingResoult.setSzavazasId(savedVoting.getSzavazasId());
 
         return votingResoult;
-    }
+    }*/
 
-    public void saveVotingProcedure(VotingProcedure votingProcedure) {
+    public Resoult saveVotingProcedure(VotingProcedure votingProcedure) {
         votingProcedure.setSzavazasId(votingProcedure.generateUniqueId());
         //ellenőrzések: időpont, képviselők csak egyszer szavazzanak
         votingProcedureRepository.save(votingProcedure);
+        Resoult votingResoult = new Resoult();
+        votingResoult.setSzavazasId(votingProcedure.generateUniqueId());
+        return votingResoult;
     }
 }

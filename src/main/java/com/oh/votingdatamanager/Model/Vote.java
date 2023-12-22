@@ -24,4 +24,7 @@ public class Vote {
     @ManyToOne
     public VotingProcedure votingProcedure;
 
+    public String getKepviselo() {
+        return kepviselo;
+    }
 }

@@ -50,4 +50,14 @@ public class VotingProcedure {
     public Set<Vote> getSzavazatok() {
         return szavazatok;
     }
+
+    public LocalDateTime getIdopont() {
+        return idopont;
+    }
+
+    public long elnokSzavazatainakSzama() {
+        return szavazatok
+                .stream()
+                .filter(szavazat -> szavazat.getKepviselo().equals(elnok)).count();
+    }
 }

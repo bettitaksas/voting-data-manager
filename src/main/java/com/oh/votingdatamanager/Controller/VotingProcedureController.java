@@ -1,5 +1,6 @@
 package com.oh.votingdatamanager.Controller;
 
+import com.oh.votingdatamanager.Model.Resoult;
 import com.oh.votingdatamanager.Model.VotingProcedure;
 import com.oh.votingdatamanager.Service.VoteService;
 import com.oh.votingdatamanager.Service.VotingProcedureService;
@@ -23,13 +24,13 @@ public class VotingProcedureController {
 
     @PostMapping(value = "/szavazas", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<VotingProcedure> saveVotingResoult(@RequestBody VotingProcedure votingProcedure) {
+    public ResponseEntity<Resoult> saveVotingResoult(@RequestBody VotingProcedure votingProcedure) {
         try {
 
             votingProcedure.getSzavazatok().forEach(voteService::saveVote);
 
-            votingProcedureService.saveVotingProcedure(votingProcedure);
-            return new ResponseEntity<>(votingProcedure, HttpStatus.OK);
+            Resoult resoult = votingProcedureService.saveVotingProcedure(votingProcedure);
+            return new ResponseEntity<>(resoult, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             //egyéb hibakezelés
