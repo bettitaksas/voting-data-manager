@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -59,5 +60,11 @@ public class VotingProcedure {
         return szavazatok
                 .stream()
                 .filter(szavazat -> szavazat.getKepviselo().equals(elnok)).count();
+    }
+
+    public boolean kepviselokEgyszerSzavaztak() {
+        Set<String> szavazoKepviselok = new HashSet<>();
+        return szavazatok.stream()
+                .allMatch(szavazat -> szavazoKepviselok.add(szavazat.getKepviselo()));
     }
 }
