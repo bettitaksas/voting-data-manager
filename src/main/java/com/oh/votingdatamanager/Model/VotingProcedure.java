@@ -24,20 +24,36 @@ public class VotingProcedure {
 
     private String szavazasId;
 
-    public LocalDateTime idopont;
+    private LocalDateTime idopont;
 
-    public String targy;
+    private String targy;
 
-    public VotingType tipus;
+    private VotingType tipus;
 
-    public String elnok;
+    private String elnok;
 
     @OneToMany
-    public Set<Vote> szavazatok;
+    private Set<Vote> szavazatok;
 
     public String generateUniqueId() {
         szavazasId = UUID.randomUUID().toString();
         return szavazasId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTargy() {
+        return targy;
+    }
+
+    public VotingType getTipus() {
+        return tipus;
+    }
+
+    public String getElnok() {
+        return elnok;
     }
 
     public String getSzavazasId() {

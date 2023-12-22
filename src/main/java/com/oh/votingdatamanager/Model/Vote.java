@@ -17,15 +17,27 @@ public class Vote {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public String kepviselo;
+    private String kepviselo;
 
-    public VoteOption szavazat;
+    private VoteOption szavazat;
 
     @ManyToOne
     public VotingProcedure votingProcedure;
 
     public String getKepviselo() {
         return kepviselo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public VoteOption getSzavazat() {
+        return szavazat;
+    }
+
+    public VotingProcedure getVotingProcedure() {
+        return votingProcedure;
     }
 
     public void setVotingProcedure(VotingProcedure votingProcedure) {
