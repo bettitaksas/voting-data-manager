@@ -1,6 +1,7 @@
 package com.oh.votingdatamanager.Controller;
 
 import com.oh.votingdatamanager.Model.Resoult;
+import com.oh.votingdatamanager.Model.VoteByIdAndKepviselo;
 import com.oh.votingdatamanager.Model.VotingProcedure;
 import com.oh.votingdatamanager.Service.VoteService;
 import com.oh.votingdatamanager.Service.VotingProcedureService;
@@ -33,8 +34,19 @@ public class VotingProcedureController {
             return new ResponseEntity<>(resoult, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            //egyéb hibakezelés
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/szavazat")
+    public ResponseEntity<Object> getVoteBySzavazasIdAndKepviselo(
+            @RequestParam(name = "szavazas") String szavazasId,
+            @RequestParam(name = "kepviselo") String kepviselo) {
+
+        String szavazat = voteService.findSzavazatByIdAndKepviselo(szavazasId, kepviselo);
+        VoteByIdAndKepviselo voteByIdAndKepviselo = new VoteByIdAndKepviselo();
+        voteByIdAndKepviselo.setSzavazat(szavazat);
+        return new ResponseEntity<>(voteByIdAndKepviselo, HttpStatus.OK);
+
     }
 }
