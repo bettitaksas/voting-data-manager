@@ -19,6 +19,7 @@ public class Vote {
 
     private String kepviselo;
 
+    @Enumerated(EnumType.STRING)
     private VoteOption szavazat;
 
     @ManyToOne
@@ -38,6 +39,14 @@ public class Vote {
 
     public VotingProcedure getVotingProcedure() {
         return votingProcedure;
+    }
+
+    public void setKepviselo(String kepviselo) {
+        this.kepviselo = kepviselo;
+    }
+
+    public void setSzavazat(VoteOption szavazat) {
+        this.szavazat = szavazat;
     }
 
     public void setVotingProcedure(VotingProcedure votingProcedure) {

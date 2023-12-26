@@ -28,6 +28,7 @@ public class VotingProcedure {
 
     private String targy;
 
+    @Enumerated(EnumType.STRING)
     private VotingType tipus;
 
     private String elnok;
