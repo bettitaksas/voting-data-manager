@@ -13,6 +13,7 @@ public class VotingProcedureService {
     private final VotingProcedureRepository votingProcedureRepository;
     private final VotingProcedureValidator votingProcedureValidator;
 
+
     @Autowired
     public VotingProcedureService(VotingProcedureRepository votingProcedureRepository, VotingProcedureValidator votingProcedureValidator) {
         this.votingProcedureRepository = votingProcedureRepository;
@@ -22,7 +23,7 @@ public class VotingProcedureService {
     public Resoult saveVotingProcedure(VotingProcedure votingProcedure) {
         Resoult votingResoult = new Resoult();
 
-        if(!votingProcedureValidator.elnokSzavazott(votingProcedure)) {
+        if (!votingProcedureValidator.elnokSzavazott(votingProcedure)) {
             votingResoult.setError("Az elnöknek kötelező szavaznia.");
         } else if (!votingProcedureValidator.kepviselokEgyszerSzavaztak(votingProcedure)) {
             votingResoult.setError("Minden képviselő maximum egyszer szavazhat.");
@@ -36,7 +37,7 @@ public class VotingProcedureService {
             }
 
             votingProcedureRepository.save(votingProcedure);
-            votingResoult.setSzavazasId(votingProcedure.generateUniqueId());
+            votingResoult.setSzavazasId(votingProcedure.getSzavazasId());
         }
         return votingResoult;
     }
