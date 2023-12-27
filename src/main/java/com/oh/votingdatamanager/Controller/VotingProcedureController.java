@@ -1,12 +1,15 @@
 package com.oh.votingdatamanager.Controller;
 
+import com.oh.votingdatamanager.Model.CalculatedResoult;
 import com.oh.votingdatamanager.Model.Resoult;
 import com.oh.votingdatamanager.Model.VoteByIdAndKepviselo;
 import com.oh.votingdatamanager.Model.VotingProcedure;
 import com.oh.votingdatamanager.Service.VoteService;
 import com.oh.votingdatamanager.Service.VotingProcedureService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,5 +51,11 @@ public class VotingProcedureController {
         voteByIdAndKepviselo.setSzavazat(szavazat);
         return new ResponseEntity<>(voteByIdAndKepviselo, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/eredmeny/{szavazasId}")
+    public ResponseEntity<Object> getVotingResult(@PathVariable String szavazasId) {
+        CalculatedResoult calculatedResoult = votingProcedureService.calculateVotingResult(szavazasId);
+        return new ResponseEntity<>(calculatedResoult, HttpStatus.OK);
     }
 }
