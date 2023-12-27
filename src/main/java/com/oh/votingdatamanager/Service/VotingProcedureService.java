@@ -5,6 +5,7 @@ import com.oh.votingdatamanager.Repository.VotingProcedureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -21,6 +22,12 @@ public class VotingProcedureService {
     public VotingProcedureService(VotingProcedureRepository votingProcedureRepository, VotingProcedureValidator votingProcedureValidator) {
         this.votingProcedureRepository = votingProcedureRepository;
         this.votingProcedureValidator = votingProcedureValidator;
+    }
+
+    public static double formatDouble(double value) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        String formattedValue = df.format(value).replace(',', '.');
+        return Double.parseDouble(formattedValue);
     }
 
     public Resoult saveVotingProcedure(VotingProcedure votingProcedure) {
@@ -81,4 +88,36 @@ public class VotingProcedureService {
 
         return votingProcedureRepository.findAllByIdopontBetween(startOfDay, endOfDay);
     }
+
+    public double calculateAverageParticipationResoultDTO(String kepviselo, LocalDate startDate, LocalDate endDate) {
+
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+
+        Set<VotingProcedure> votingProcedures = votingProcedureRepository.findAllByIdopontBetween(startDateTime, endDateTime);
+
+        if (votingProcedures.isEmpty()) {
+            return 0.00;
+        }
+
+        int kepviseloCounter = 0;
+
+        for (VotingProcedure votingProcedure : votingProcedures) {
+            for (Vote vote : votingProcedure.getSzavazatok()) {
+                if (vote.getKepviselo().equals(kepviselo)) {
+                    kepviseloCounter++;
+                }
+            }
+        }
+
+        double dKepviseloCounter = kepviseloCounter;
+        double dszavazasokSzama = votingProcedures.size();
+
+        System.out.println(dKepviseloCounter / dszavazasokSzama);
+        double resoult = formatDouble(dKepviseloCounter / dszavazasokSzama);
+        System.out.println(resoult);
+        return resoult;
+
+    }
+
 }
