@@ -1,5 +1,6 @@
 package com.oh.votingdatamanager.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +34,7 @@ public class VotingProcedure {
 
     private String elnok;
 
+    @JsonBackReference
     @OneToMany
     private Set<Vote> szavazatok;
 
