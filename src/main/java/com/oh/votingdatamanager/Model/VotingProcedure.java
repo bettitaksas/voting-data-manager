@@ -71,6 +71,10 @@ public class VotingProcedure {
         return szavazatok;
     }
 
+    public void setSzavazatok(Set<Vote> szavazatok) {
+        this.szavazatok = szavazatok;
+    }
+
     public LocalDateTime getIdopont() {
         return idopont;
     }

@@ -1,5 +1,7 @@
 package com.oh.votingdatamanager.Controller;
 
+import com.oh.votingdatamanager.DTO.VoteDTO;
+import com.oh.votingdatamanager.DTO.VotingProcedureDTO;
 import com.oh.votingdatamanager.Model.*;
 import com.oh.votingdatamanager.Service.VoteService;
 import com.oh.votingdatamanager.Service.VotingProcedureService;
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/szavazasok")
@@ -69,8 +72,26 @@ public class VotingProcedureController {
         System.out.println(votingProcedureService.getVotingProceduresByDay(day));
 
         Set<VotingProcedure> szavazatok = votingProcedureService.getVotingProceduresByDay(day);
+
+        Set<VotingProcedureDTO> result = szavazatok.stream()
+                .map(vp -> {
+                    VotingProcedureDTO dto = new VotingProcedureDTO();
+                    dto.setIdopont(vp.getIdopont());
+                    dto.setTargy(vp.getTargy());
+                    dto.setTipus(vp.getTipus());
+                    dto.setElnok(vp.getElnok());
+                    dto.setEredmeny(votingProcedureService.calculateVotingResult(vp.getSzavazasId()).getEredmeny());
+                    dto.setKepviselokSzama(votingProcedureService.calculateVotingResult(vp.getSzavazasId()).getKepviselokSzama());
+                    dto.setSzavazatok(vp.getSzavazatok().stream()
+                            .map(vote -> new VoteDTO(vote.getKepviselo(), vote.getSzavazat().toString()))
+                            .collect(Collectors.toSet())
+                    );
+                    return dto;
+                })
+                .collect(Collectors.toSet());
+
         VotingsByDay votingsByDay = new VotingsByDay();
-        votingsByDay.setSzavazatok(szavazatok);
+        votingsByDay.setSzavazatok(result);
 
         return new ResponseEntity<>(votingsByDay, HttpStatus.OK);
     }
