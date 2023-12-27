@@ -1,9 +1,6 @@
 package com.oh.votingdatamanager.Controller;
 
-import com.oh.votingdatamanager.Model.CalculatedResoult;
-import com.oh.votingdatamanager.Model.Resoult;
-import com.oh.votingdatamanager.Model.VoteByIdAndKepviselo;
-import com.oh.votingdatamanager.Model.VotingProcedure;
+import com.oh.votingdatamanager.Model.*;
 import com.oh.votingdatamanager.Service.VoteService;
 import com.oh.votingdatamanager.Service.VotingProcedureService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/szavazasok")
@@ -57,5 +59,19 @@ public class VotingProcedureController {
     public ResponseEntity<Object> getVotingResult(@PathVariable String szavazasId) {
         CalculatedResoult calculatedResoult = votingProcedureService.calculateVotingResult(szavazasId);
         return new ResponseEntity<>(calculatedResoult, HttpStatus.OK);
+    }
+
+    @GetMapping("/napi-szavazasok/{day}")
+    public ResponseEntity<VotingsByDay> getVotingProceduresByDay(@PathVariable LocalDate day) {
+
+        System.out.println(day);
+
+        System.out.println(votingProcedureService.getVotingProceduresByDay(day));
+
+        Set<VotingProcedure> szavazatok = votingProcedureService.getVotingProceduresByDay(day);
+        VotingsByDay votingsByDay = new VotingsByDay();
+        votingsByDay.setSzavazatok(szavazatok);
+
+        return new ResponseEntity<>(votingsByDay, HttpStatus.OK);
     }
 }
