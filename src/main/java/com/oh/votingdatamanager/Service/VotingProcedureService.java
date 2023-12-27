@@ -1,8 +1,6 @@
 package com.oh.votingdatamanager.Service;
 
-import com.oh.votingdatamanager.Model.Resoult;
-import com.oh.votingdatamanager.Model.Vote;
-import com.oh.votingdatamanager.Model.VotingProcedure;
+import com.oh.votingdatamanager.Model.*;
 import com.oh.votingdatamanager.Repository.VotingProcedureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,5 +38,34 @@ public class VotingProcedureService {
             votingResoult.setSzavazasId(votingProcedure.getSzavazasId());
         }
         return votingResoult;
+    }
+
+    public CalculatedResoult calculateVotingResult(String szavazasId) {
+        VotingProcedure votingProcedure = votingProcedureRepository.findBySzavazasId(szavazasId)
+                .orElse(null);
+
+        int kepviselokSzama = votingProcedure.getSzavazatok().size();
+        int igenekSzama = (int) votingProcedure.getSzavazatok().stream().filter(vote -> vote.getSzavazat() == VoteOption.i).count();
+        int nemekSzama = (int) votingProcedure.getSzavazatok().stream().filter(vote -> vote.getSzavazat() == VoteOption.n).count();
+        int tartozkodasokSzama = (int) votingProcedure.getSzavazatok().stream().filter(vote -> vote.getSzavazat() == VoteOption.t).count();
+
+        CalculatedResoult calculatedResoult = new CalculatedResoult();
+        calculatedResoult.setEredmeny(calculateResoult(kepviselokSzama, igenekSzama));
+        calculatedResoult.setKepviselokSzama(kepviselokSzama);
+        calculatedResoult.setIgenekSzama(igenekSzama);
+        calculatedResoult.setNemekSzama(nemekSzama);
+        calculatedResoult.setTartozkodasokSzama(tartozkodasokSzama);
+
+        return calculatedResoult;
+    }
+
+    private String calculateResoult(int kepviselokSzama, int igenekSzama) {
+        if (kepviselokSzama == 0) {
+            return "U";
+        } else if (igenekSzama > kepviselokSzama / 2) {
+            return "F";
+        } else {
+            return "U";
+        }
     }
 }

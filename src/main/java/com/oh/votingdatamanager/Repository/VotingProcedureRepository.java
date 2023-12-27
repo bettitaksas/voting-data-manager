@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface VotingProcedureRepository extends JpaRepository<VotingProcedure, Long> {
     Optional<VotingProcedure> findByIdopont(LocalDateTime idopont);
+    Optional<VotingProcedure> findBySzavazasId(String szavazasId);
 }
