@@ -1,20 +1,17 @@
 package com.oh.votingdatamanager.Controller;
 
+import com.oh.votingdatamanager.DTO.AverageParticipationResoultDTO;
 import com.oh.votingdatamanager.DTO.VoteDTO;
 import com.oh.votingdatamanager.DTO.VotingProcedureDTO;
 import com.oh.votingdatamanager.Model.*;
 import com.oh.votingdatamanager.Service.VoteService;
 import com.oh.votingdatamanager.Service.VotingProcedureService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -94,5 +91,19 @@ public class VotingProcedureController {
         votingsByDay.setSzavazatok(result);
 
         return new ResponseEntity<>(votingsByDay, HttpStatus.OK);
+    }
+
+    @GetMapping("/kepviselo-reszvetel-atlag")
+    public ResponseEntity<AverageParticipationResoultDTO> getAverageParticipation(
+            @RequestParam String kepviselo,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate) {
+
+        double atlag = votingProcedureService.calculateAverageParticipationResoultDTO(kepviselo, startDate, endDate);
+
+        AverageParticipationResoultDTO resoult = new AverageParticipationResoultDTO();
+        resoult.setAtlag(atlag);
+
+        return new ResponseEntity<>(resoult, HttpStatus.OK);
     }
 }
