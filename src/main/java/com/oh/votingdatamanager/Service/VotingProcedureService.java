@@ -5,6 +5,11 @@ import com.oh.votingdatamanager.Repository.VotingProcedureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Set;
+
 @Service
 public class VotingProcedureService {
 
@@ -67,5 +72,13 @@ public class VotingProcedureService {
         } else {
             return "U";
         }
+    }
+
+    public Set<VotingProcedure> getVotingProceduresByDay(LocalDate day) {
+
+        LocalDateTime startOfDay = day.atStartOfDay();
+        LocalDateTime endOfDay = day.atTime(LocalTime.MAX);
+
+        return votingProcedureRepository.findAllByIdopontBetween(startOfDay, endOfDay);
     }
 }
