@@ -11,6 +11,7 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -88,7 +89,8 @@ public class VotingProcedureService {
         LocalDateTime startOfDay = day.atStartOfDay();
         LocalDateTime endOfDay = day.atTime(LocalTime.MAX);
 
-        return votingProcedureRepository.findAllByIdopontBetween(startOfDay, endOfDay);
+        Optional<Set<VotingProcedure>> optionalVotingProcedures = votingProcedureRepository.findAllByIdopontBetween(startOfDay, endOfDay);
+        return optionalVotingProcedures.orElse(null);
     }
 
     public double calculateAverageParticipationResoultDTO(String kepviselo, LocalDate startDate, LocalDate endDate) {
@@ -96,15 +98,15 @@ public class VotingProcedureService {
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
 
-        Set<VotingProcedure> votingProcedures = votingProcedureRepository.findAllByIdopontBetween(startDateTime, endDateTime);
+        Optional<Set<VotingProcedure>> optionalVotingProcedures = votingProcedureRepository.findAllByIdopontBetween(startDateTime, endDateTime);
 
-        if (votingProcedures.isEmpty()) {
+        if (optionalVotingProcedures.isEmpty()) {
             return 0.00;
         }
 
         int kepviseloCounter = 0;
 
-        for (VotingProcedure votingProcedure : votingProcedures) {
+        for (VotingProcedure votingProcedure : optionalVotingProcedures.get()) {
             for (Vote vote : votingProcedure.getSzavazatok()) {
                 if (vote.getKepviselo().equals(kepviselo)) {
                     kepviseloCounter++;
@@ -113,7 +115,7 @@ public class VotingProcedureService {
         }
 
         double dKepviseloCounter = kepviseloCounter;
-        double dszavazasokSzama = votingProcedures.size();
+        double dszavazasokSzama = optionalVotingProcedures.get().size();
 
         System.out.println(dKepviseloCounter / dszavazasokSzama);
         double resoult = formatDouble(dKepviseloCounter / dszavazasokSzama);

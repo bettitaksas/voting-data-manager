@@ -17,7 +17,7 @@ public interface VotingProcedureRepository extends JpaRepository<VotingProcedure
     //Set<VotingProcedure> findAllByIdopontBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
 
     @Query("SELECT vp FROM VotingProcedure vp LEFT JOIN FETCH vp.szavazatok WHERE vp.idopont BETWEEN :startOfDay AND :endOfDay")
-    Set<VotingProcedure> findAllByIdopontBetween(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
+    Optional<Set<VotingProcedure>> findAllByIdopontBetween(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
 
 
 }
