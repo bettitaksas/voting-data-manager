@@ -2,9 +2,12 @@ package com.oh.votingdatamanager.Service;
 
 import com.oh.votingdatamanager.DTO.CalculatedVotingResoultDTO;
 import com.oh.votingdatamanager.DTO.PostNewVotingResoultDTO;
-import com.oh.votingdatamanager.Model.*;
+import com.oh.votingdatamanager.Model.Vote;
+import com.oh.votingdatamanager.Model.VoteOption;
+import com.oh.votingdatamanager.Model.VotingProcedure;
 import com.oh.votingdatamanager.Repository.VotingProcedureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
@@ -55,23 +58,30 @@ public class VotingProcedureService {
         return votingResoult;
     }
 
-    public CalculatedVotingResoultDTO calculateVotingResult(String szavazasId) {
-        VotingProcedure votingProcedure = votingProcedureRepository.findBySzavazasId(szavazasId)
-                .orElse(null);
+    public CalculatedVotingResoultDTO calculateVotingResult(String szavazasId) throws ChangeSetPersister.NotFoundException {
+        Optional<VotingProcedure> optionalVotingProcedure = votingProcedureRepository.findBySzavazasId(szavazasId);
 
-        int kepviselokSzama = votingProcedure.getSzavazatok().size();
-        int igenekSzama = (int) votingProcedure.getSzavazatok().stream().filter(vote -> vote.getSzavazat() == VoteOption.i).count();
-        int nemekSzama = (int) votingProcedure.getSzavazatok().stream().filter(vote -> vote.getSzavazat() == VoteOption.n).count();
-        int tartozkodasokSzama = (int) votingProcedure.getSzavazatok().stream().filter(vote -> vote.getSzavazat() == VoteOption.t).count();
+        if (optionalVotingProcedure.isPresent()) {
+            VotingProcedure votingProcedure = optionalVotingProcedure.get();
 
-        CalculatedVotingResoultDTO calculatedResoult = new CalculatedVotingResoultDTO();
-        calculatedResoult.setEredmeny(calculateResoult(kepviselokSzama, igenekSzama));
-        calculatedResoult.setKepviselokSzama(kepviselokSzama);
-        calculatedResoult.setIgenekSzama(igenekSzama);
-        calculatedResoult.setNemekSzama(nemekSzama);
-        calculatedResoult.setTartozkodasokSzama(tartozkodasokSzama);
+            int kepviselokSzama = votingProcedure.getSzavazatok().size();
+            int igenekSzama = (int) votingProcedure.getSzavazatok().stream().filter(vote -> vote.getSzavazat() == VoteOption.i).count();
+            int nemekSzama = (int) votingProcedure.getSzavazatok().stream().filter(vote -> vote.getSzavazat() == VoteOption.n).count();
+            int tartozkodasokSzama = (int) votingProcedure.getSzavazatok().stream().filter(vote -> vote.getSzavazat() == VoteOption.t).count();
 
-        return calculatedResoult;
+            CalculatedVotingResoultDTO calculatedResoult = new CalculatedVotingResoultDTO();
+            calculatedResoult.setEredmeny(calculateResoult(kepviselokSzama, igenekSzama));
+            calculatedResoult.setKepviselokSzama(kepviselokSzama);
+            calculatedResoult.setIgenekSzama(igenekSzama);
+            calculatedResoult.setNemekSzama(nemekSzama);
+            calculatedResoult.setTartozkodasokSzama(tartozkodasokSzama);
+
+            return calculatedResoult;
+        } else {
+            throw new ChangeSetPersister.NotFoundException();
+        }
+
+
     }
 
     private String calculateResoult(int kepviselokSzama, int igenekSzama) {
@@ -117,9 +127,7 @@ public class VotingProcedureService {
         double dKepviseloCounter = kepviseloCounter;
         double dszavazasokSzama = optionalVotingProcedures.get().size();
 
-        System.out.println(dKepviseloCounter / dszavazasokSzama);
         double resoult = formatDouble(dKepviseloCounter / dszavazasokSzama);
-        System.out.println(resoult);
         return resoult;
 
     }

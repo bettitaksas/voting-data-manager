@@ -1,10 +1,11 @@
 package com.oh.votingdatamanager.Controller;
 
 import com.oh.votingdatamanager.DTO.*;
-import com.oh.votingdatamanager.Model.*;
+import com.oh.votingdatamanager.Model.VotingProcedure;
 import com.oh.votingdatamanager.Service.VoteService;
 import com.oh.votingdatamanager.Service.VotingProcedureService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,8 +56,12 @@ public class VotingProcedureController {
 
     @GetMapping("/eredmeny/{szavazasId}")
     public ResponseEntity<Object> getVotingResult(@PathVariable String szavazasId) {
-        CalculatedVotingResoultDTO calculatedResoult = votingProcedureService.calculateVotingResult(szavazasId);
-        return new ResponseEntity<>(calculatedResoult, HttpStatus.OK);
+        try {
+            CalculatedVotingResoultDTO calculatedResoult = votingProcedureService.calculateVotingResult(szavazasId);
+            return new ResponseEntity<>(calculatedResoult, HttpStatus.OK);
+        } catch (ChangeSetPersister.NotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/napi-szavazasok/{day}")
@@ -71,8 +76,16 @@ public class VotingProcedureController {
                     dto.setTargy(vp.getTargy());
                     dto.setTipus(vp.getTipus());
                     dto.setElnok(vp.getElnok());
-                    dto.setEredmeny(votingProcedureService.calculateVotingResult(vp.getSzavazasId()).getEredmeny());
-                    dto.setKepviselokSzama(votingProcedureService.calculateVotingResult(vp.getSzavazasId()).getKepviselokSzama());
+                    try {
+                        dto.setEredmeny(votingProcedureService.calculateVotingResult(vp.getSzavazasId()).getEredmeny());
+                    } catch (ChangeSetPersister.NotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        dto.setKepviselokSzama(votingProcedureService.calculateVotingResult(vp.getSzavazasId()).getKepviselokSzama());
+                    } catch (ChangeSetPersister.NotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
                     dto.setSzavazatok(vp.getSzavazatok().stream()
                             .map(vote -> new VoteDTO(vote.getKepviselo(), vote.getSzavazat().toString()))
                             .collect(Collectors.toSet())
