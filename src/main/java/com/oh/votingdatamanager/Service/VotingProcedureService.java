@@ -1,7 +1,6 @@
 package com.oh.votingdatamanager.Service;
 
-import com.oh.votingdatamanager.DTO.CalculatedVotingResoultDTO;
-import com.oh.votingdatamanager.DTO.PostNewVotingResoultDTO;
+import com.oh.votingdatamanager.DTO.*;
 import com.oh.votingdatamanager.Model.Vote;
 import com.oh.votingdatamanager.Model.VoteOption;
 import com.oh.votingdatamanager.Model.VotingProcedure;
@@ -16,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class VotingProcedureService {
@@ -80,8 +80,6 @@ public class VotingProcedureService {
         } else {
             throw new ChangeSetPersister.NotFoundException();
         }
-
-
     }
 
     private String calculateResoult(int kepviselokSzama, int igenekSzama) {
@@ -94,24 +92,61 @@ public class VotingProcedureService {
         }
     }
 
-    public Set<VotingProcedure> getVotingProceduresByDay(LocalDate day) {
+    public VotingsByDayDTO getVotingProceduresByDay(LocalDate day) throws ChangeSetPersister.NotFoundException {
 
         LocalDateTime startOfDay = day.atStartOfDay();
         LocalDateTime endOfDay = day.atTime(LocalTime.MAX);
 
         Optional<Set<VotingProcedure>> optionalVotingProcedures = votingProcedureRepository.findAllByIdopontBetween(startOfDay, endOfDay);
-        return optionalVotingProcedures.orElse(null);
+
+        if (optionalVotingProcedures.isPresent()) {
+            Set<VotingProcedure> szavazatok = optionalVotingProcedures.get();
+
+            Set<VotingProcedureDTO> result = szavazatok.stream()
+                    .map(vp -> {
+                        VotingProcedureDTO dto = new VotingProcedureDTO();
+                        dto.setIdopont(vp.getIdopont());
+                        dto.setTargy(vp.getTargy());
+                        dto.setTipus(vp.getTipus());
+                        dto.setElnok(vp.getElnok());
+                        try {
+                            dto.setEredmeny(calculateVotingResult(vp.getSzavazasId()).getEredmeny());
+                        } catch (ChangeSetPersister.NotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                        try {
+                            dto.setKepviselokSzama(calculateVotingResult(vp.getSzavazasId()).getKepviselokSzama());
+                        } catch (ChangeSetPersister.NotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                        dto.setSzavazatok(vp.getSzavazatok().stream()
+                                .map(vote -> new VoteDTO(vote.getKepviselo(), vote.getSzavazat().toString()))
+                                .collect(Collectors.toSet())
+                        );
+                        return dto;
+                    })
+                    .collect(Collectors.toSet());
+
+            VotingsByDayDTO votingsByDay = new VotingsByDayDTO();
+            votingsByDay.setSzavazatok(result);
+            return votingsByDay;
+
+        } else {
+            throw new ChangeSetPersister.NotFoundException();
+        }
     }
 
-    public double calculateAverageParticipationResoultDTO(String kepviselo, LocalDate startDate, LocalDate endDate) {
+    public AverageParticipationResoultDTO calculateAverageParticipationResoult(String kepviselo, LocalDate startDate, LocalDate endDate) {
 
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
 
         Optional<Set<VotingProcedure>> optionalVotingProcedures = votingProcedureRepository.findAllByIdopontBetween(startDateTime, endDateTime);
 
-        if (optionalVotingProcedures.isEmpty()) {
-            return 0.00;
+        if (optionalVotingProcedures.isEmpty() || optionalVotingProcedures.get().isEmpty()) {
+            AverageParticipationResoultDTO resoult = new AverageParticipationResoultDTO();
+            resoult.setAtlag(0.00);
+            return resoult;
         }
 
         int kepviseloCounter = 0;
@@ -127,9 +162,10 @@ public class VotingProcedureService {
         double dKepviseloCounter = kepviseloCounter;
         double dszavazasokSzama = optionalVotingProcedures.get().size();
 
-        double resoult = formatDouble(dKepviseloCounter / dszavazasokSzama);
+        double atlag = formatDouble(dKepviseloCounter / dszavazasokSzama);
+
+        AverageParticipationResoultDTO resoult = new AverageParticipationResoultDTO();
+        resoult.setAtlag(atlag);
         return resoult;
-
     }
-
 }

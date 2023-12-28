@@ -1,8 +1,10 @@
 package com.oh.votingdatamanager.Service;
 
+import com.oh.votingdatamanager.DTO.VoteByIdAndKepviseloDTO;
 import com.oh.votingdatamanager.Model.Vote;
 import com.oh.votingdatamanager.Repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -21,14 +23,18 @@ public class VoteService {
         voteRepository.save(vote);
     }
 
-    public String findSzavazatByIdAndKepviselo(String szavazasId, String kepviseloId) {
-        try {
-            Optional<Vote> voteOptional = voteRepository.findByVotingProcedure_SzavazasIdAndKepviselo(szavazasId, kepviseloId);
-            return voteOptional.get().getSzavazat().toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+    public VoteByIdAndKepviseloDTO findSzavazatByIdAndKepviselo(String szavazasId, String kepviselo) throws ChangeSetPersister.NotFoundException {
+
+        Optional<Vote> optionalVote = voteRepository.findByVotingProcedure_SzavazasIdAndKepviselo(szavazasId, kepviselo);
+        if (optionalVote.isPresent()){
+            String szavazat = optionalVote.get().getSzavazat().toString();
+            VoteByIdAndKepviseloDTO voteByIdAndKepviselo = new VoteByIdAndKepviseloDTO();
+            voteByIdAndKepviselo.setSzavazat(szavazat);
+            return voteByIdAndKepviselo;
+        } else {
+            throw new ChangeSetPersister.NotFoundException();
         }
+
     }
 
 
