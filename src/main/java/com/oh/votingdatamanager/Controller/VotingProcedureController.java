@@ -1,8 +1,6 @@
 package com.oh.votingdatamanager.Controller;
 
-import com.oh.votingdatamanager.DTO.AverageParticipationResoultDTO;
-import com.oh.votingdatamanager.DTO.VoteDTO;
-import com.oh.votingdatamanager.DTO.VotingProcedureDTO;
+import com.oh.votingdatamanager.DTO.*;
 import com.oh.votingdatamanager.Model.*;
 import com.oh.votingdatamanager.Service.VoteService;
 import com.oh.votingdatamanager.Service.VotingProcedureService;
@@ -30,12 +28,12 @@ public class VotingProcedureController {
 
     @PostMapping(value = "/szavazas", produces = "application/json")
     @ResponseBody
-    public ResponseEntity<Resoult> saveVotingResoult(@RequestBody VotingProcedure votingProcedure) {
+    public ResponseEntity<PostNewVotingResoultDTO> saveVotingResoult(@RequestBody VotingProcedure votingProcedure) {
         try {
 
             votingProcedure.getSzavazatok().forEach(voteService::saveVote);
 
-            Resoult resoult = votingProcedureService.saveVotingProcedure(votingProcedure);
+            PostNewVotingResoultDTO resoult = votingProcedureService.saveVotingProcedure(votingProcedure);
             return new ResponseEntity<>(resoult, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,7 +47,7 @@ public class VotingProcedureController {
             @RequestParam(name = "kepviselo") String kepviselo) {
 
         String szavazat = voteService.findSzavazatByIdAndKepviselo(szavazasId, kepviselo);
-        VoteByIdAndKepviselo voteByIdAndKepviselo = new VoteByIdAndKepviselo();
+        VoteByIdAndKepviseloDTO voteByIdAndKepviselo = new VoteByIdAndKepviseloDTO();
         voteByIdAndKepviselo.setSzavazat(szavazat);
         return new ResponseEntity<>(voteByIdAndKepviselo, HttpStatus.OK);
 
@@ -57,16 +55,12 @@ public class VotingProcedureController {
 
     @GetMapping("/eredmeny/{szavazasId}")
     public ResponseEntity<Object> getVotingResult(@PathVariable String szavazasId) {
-        CalculatedResoult calculatedResoult = votingProcedureService.calculateVotingResult(szavazasId);
+        CalculatedVotingResoultDTO calculatedResoult = votingProcedureService.calculateVotingResult(szavazasId);
         return new ResponseEntity<>(calculatedResoult, HttpStatus.OK);
     }
 
     @GetMapping("/napi-szavazasok/{day}")
-    public ResponseEntity<VotingsByDay> getVotingProceduresByDay(@PathVariable LocalDate day) {
-
-        System.out.println(day);
-
-        System.out.println(votingProcedureService.getVotingProceduresByDay(day));
+    public ResponseEntity<VotingsByDayDTO> getVotingProceduresByDay(@PathVariable LocalDate day) {
 
         Set<VotingProcedure> szavazatok = votingProcedureService.getVotingProceduresByDay(day);
 
@@ -87,7 +81,7 @@ public class VotingProcedureController {
                 })
                 .collect(Collectors.toSet());
 
-        VotingsByDay votingsByDay = new VotingsByDay();
+        VotingsByDayDTO votingsByDay = new VotingsByDayDTO();
         votingsByDay.setSzavazatok(result);
 
         return new ResponseEntity<>(votingsByDay, HttpStatus.OK);

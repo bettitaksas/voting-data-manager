@@ -1,10 +1,5 @@
 package com.oh.votingdatamanager.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
-//@NoArgsConstructor
-//@AllArgsConstructor
 public class VoteDTO {
     private String kepviselo;
     private String szavazat;

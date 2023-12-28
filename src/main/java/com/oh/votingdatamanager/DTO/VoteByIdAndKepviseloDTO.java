@@ -1,11 +1,11 @@
-package com.oh.votingdatamanager.Model;
+package com.oh.votingdatamanager.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class VoteByIdAndKepviselo {
+public class VoteByIdAndKepviseloDTO {
     private String szavazat;
 
     public String getSzavazat() {

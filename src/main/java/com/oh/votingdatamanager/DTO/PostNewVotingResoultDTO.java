@@ -1,16 +1,11 @@
-package com.oh.votingdatamanager.Model;
+package com.oh.votingdatamanager.DTO;
 
-public class Resoult {
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+public class PostNewVotingResoultDTO {
     private String szavazasId;
     private String error;
-
-    public Resoult() {
-    }
-
-    public Resoult(String szavazasId, String error) {
-        this.szavazasId = szavazasId;
-        this.error = error;
-    }
 
     public String getSzavazasId() {
         return szavazasId;

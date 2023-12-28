@@ -1,9 +1,9 @@
-package com.oh.votingdatamanager.Model;
+package com.oh.votingdatamanager.DTO;
 
 import lombok.Data;
 
 @Data
-public class CalculatedResoult {
+public class CalculatedVotingResoultDTO {
     private String eredmeny;
     private int kepviselokSzama;
     private int igenekSzama;

@@ -1,5 +1,7 @@
 package com.oh.votingdatamanager.Service;
 
+import com.oh.votingdatamanager.DTO.CalculatedVotingResoultDTO;
+import com.oh.votingdatamanager.DTO.PostNewVotingResoultDTO;
 import com.oh.votingdatamanager.Model.*;
 import com.oh.votingdatamanager.Repository.VotingProcedureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +32,8 @@ public class VotingProcedureService {
         return Double.parseDouble(formattedValue);
     }
 
-    public Resoult saveVotingProcedure(VotingProcedure votingProcedure) {
-        Resoult votingResoult = new Resoult();
+    public PostNewVotingResoultDTO saveVotingProcedure(VotingProcedure votingProcedure) {
+        PostNewVotingResoultDTO votingResoult = new PostNewVotingResoultDTO();
 
         if (!votingProcedureValidator.elnokSzavazott(votingProcedure)) {
             votingResoult.setError("Az elnöknek kötelező szavaznia.");
@@ -52,7 +54,7 @@ public class VotingProcedureService {
         return votingResoult;
     }
 
-    public CalculatedResoult calculateVotingResult(String szavazasId) {
+    public CalculatedVotingResoultDTO calculateVotingResult(String szavazasId) {
         VotingProcedure votingProcedure = votingProcedureRepository.findBySzavazasId(szavazasId)
                 .orElse(null);
 
@@ -61,7 +63,7 @@ public class VotingProcedureService {
         int nemekSzama = (int) votingProcedure.getSzavazatok().stream().filter(vote -> vote.getSzavazat() == VoteOption.n).count();
         int tartozkodasokSzama = (int) votingProcedure.getSzavazatok().stream().filter(vote -> vote.getSzavazat() == VoteOption.t).count();
 
-        CalculatedResoult calculatedResoult = new CalculatedResoult();
+        CalculatedVotingResoultDTO calculatedResoult = new CalculatedVotingResoultDTO();
         calculatedResoult.setEredmeny(calculateResoult(kepviselokSzama, igenekSzama));
         calculatedResoult.setKepviselokSzama(kepviselokSzama);
         calculatedResoult.setIgenekSzama(igenekSzama);

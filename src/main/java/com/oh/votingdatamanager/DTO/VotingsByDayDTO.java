@@ -1,6 +1,5 @@
-package com.oh.votingdatamanager.Model;
+package com.oh.votingdatamanager.DTO;
 
-import com.oh.votingdatamanager.DTO.VotingProcedureDTO;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +7,7 @@ import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class VotingsByDay {
+public class VotingsByDayDTO {
     private Set<VotingProcedureDTO> szavazatok;
 
     public Set<VotingProcedureDTO> getSzavazatok() {
