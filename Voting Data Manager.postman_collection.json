@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "3695c033-55db-4a43-988d-2b09775d8315",
+		"name": "Voting Data Manager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "25966526"
+	},
+	"item": [
+		{
+			"name": "Save Voting Resoult",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"idopont\": \"2023-02-10T11:16:25Z\",\r\n  \"targy\": \"Szavazas targya\",\r\n  \"tipus\": \"j\",\r\n  \"elnok\": \"Kepviselo4\",\r\n  \"szavazatok\": [\r\n  {\r\n  \"kepviselo\": \"Kepviselo1\",\r\n  \"szavazat\": \"i\"\r\n  },\r\n  {\r\n  \"kepviselo\": \"Kepviselo4\",\r\n  \"szavazat\": \"i\"\r\n  },\r\n  {\r\n  \"kepviselo\": \"Kepviselo3\",\r\n  \"szavazat\": \"t\"\r\n  }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/szavazasok/szavazas"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Vote By SzavazasId And Kepviselo",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/szavazasok/szavazat?szavazas=4d2ac1d7-606f-4e6d-93ec-5f3d66ac551f&kepviselo=Kepviselo1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"szavazasok",
+						"szavazat"
+					],
+					"query": [
+						{
+							"key": "szavazas",
+							"value": "4d2ac1d7-606f-4e6d-93ec-5f3d66ac551f"
+						},
+						{
+							"key": "kepviselo",
+							"value": "Kepviselo1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Voting Result",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/szavazasok/eredmeny/05a3b3ef-d781-4fac-a854-bf9052489c99"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Voting Procedures By Day",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/szavazasok/napi-szavazasok/2023-02-11"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Average Participation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/szavazasok/kepviselo-reszvetel-atlag?kepviselo=Kepviselo1&startDate=2023-01-01&endDate=2023-03-01",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"szavazasok",
+						"kepviselo-reszvetel-atlag"
+					],
+					"query": [
+						{
+							"key": "kepviselo",
+							"value": "Kepviselo1"
+						},
+						{
+							"key": "startDate",
+							"value": "2023-01-01"
+						},
+						{
+							"key": "endDate",
+							"value": "2023-03-01"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
