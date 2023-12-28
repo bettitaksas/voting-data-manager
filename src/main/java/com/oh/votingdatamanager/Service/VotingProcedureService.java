@@ -30,10 +30,9 @@ public class VotingProcedureService {
         this.votingProcedureValidator = votingProcedureValidator;
     }
 
-    public static double formatDouble(double value) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        String formattedValue = df.format(value).replace(',', '.');
-        return Double.parseDouble(formattedValue);
+    private static double formatDouble(double value, int decimalPlaces) {
+        double scale = Math.pow(10, decimalPlaces);
+        return Math.round(value * scale) / scale;
     }
 
     public PostNewVotingResoultDTO saveVotingProcedure(VotingProcedure votingProcedure) {
@@ -164,7 +163,7 @@ public class VotingProcedureService {
         double dKepviseloCounter = kepviseloCounter;
         double dszavazasokSzama = optionalVotingProcedures.get().size();
 
-        double atlag = formatDouble(dKepviseloCounter / dszavazasokSzama);
+        double atlag = formatDouble(dKepviseloCounter / dszavazasokSzama, 2);
 
         AverageParticipationResoultDTO resoult = new AverageParticipationResoultDTO();
         resoult.setAtlag(atlag);
