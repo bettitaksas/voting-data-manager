@@ -2,14 +2,10 @@
 
 ## Table of Contents
 - [Introduction](#introduction)
+- [Demo](#demo)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
-    - [Building the Project](#building-the-project)
-    - [Docker Build](#docker-build)
-    - [Running the Docker Container](#running-the-docker-container)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 
@@ -18,6 +14,14 @@ The Office supports the work of parliamentary legislators, including tasks such 
 - Recording the data of a vote  
 - Querying the vote cast by a representative in a specific vote  
 - Calculating the result of the vote (accepted/rejected)
+
+## Demo
+
+You can find a Postman Collection Json file in the root directory to test the endpoints. It looks like this in action:
+
+![Képernyőkép 2023-12-28 225504.png](..%2F..%2F..%2F..%2FOneDrive%2FK%E9pek%2FK%E9perny%F5k%E9pek%2FK%E9perny%F5k%E9p%202023-12-28%20225504.png)
+![Képernyőkép 2023-12-28 225836.png](..%2F..%2F..%2F..%2FOneDrive%2FK%E9pek%2FK%E9perny%F5k%E9pek%2FK%E9perny%F5k%E9p%202023-12-28%20225836.png)
+![Képernyőkép 2023-12-28 225803.png](..%2F..%2F..%2F..%2FOneDrive%2FK%E9pek%2FK%E9perny%F5k%E9pek%2FK%E9perny%F5k%E9p%202023-12-28%20225803.png)
 
 ## Prerequisites
 
