@@ -19,9 +19,9 @@ The Office supports the work of parliamentary legislators, including tasks such 
 
 You can find a Postman Collection Json file in the root directory to test the endpoints. It looks like this in action:
 
-![Képernyőkép 2023-12-28 225504.png](..%2F..%2F..%2F..%2FOneDrive%2FK%E9pek%2FK%E9perny%F5k%E9pek%2FK%E9perny%F5k%E9p%202023-12-28%20225504.png)
-![Képernyőkép 2023-12-28 225836.png](..%2F..%2F..%2F..%2FOneDrive%2FK%E9pek%2FK%E9perny%F5k%E9pek%2FK%E9perny%F5k%E9p%202023-12-28%20225836.png)
-![Képernyőkép 2023-12-28 225803.png](..%2F..%2F..%2F..%2FOneDrive%2FK%E9pek%2FK%E9perny%F5k%E9pek%2FK%E9perny%F5k%E9p%202023-12-28%20225803.png)
+![](img/Képernyőkép 2023-12-28 225504.png)
+![](img/Képernyőkép 2023-12-28 225836.png)
+![](img/Képernyőkép 2023-12-28 225803.png)
 
 ## Prerequisites
 
@@ -56,38 +56,43 @@ Linux:
 The VotingProcedureController class provides a RESTful interface for managing voting procedures. Below are the key operations and how to use them:
 
 1. Save Voting Result
+
    Endpoint: POST /szavazasok/szavazas
  
-   Response:
-   Status: 200 OK
+   Response:  
+   Status: 200 OK  
    Body: Details of the saved voting result
 
 2. Get Vote by SzavazasId and Kepviselo
+
    Endpoint: GET /szavazasok/szavazat?szavazas={szavazasId}&kepviselo={kepviselo}
 
-   Response:
-   Status: 200 OK
+   Response:  
+   Status: 200 OK  
    Body: Details of the vote cast by the specified representative in the given vote
 
 3. Get Voting Result by Szavazas Id
+
    Endpoint: GET /szavazasok/eredmeny/{szavazasId}
 
-   Response:
-   Status: 200 OK
+   Response:  
+   Status: 200 OK  
    Body: Calculated result of the specified vote
 
 4. Get Voting Procedures by Day
+
    Endpoint: GET /szavazasok/napi-szavazasok/{day}
 
-   Response:
-   Status: 200 OK
+   Response:  
+   Status: 200 OK  
    Body: List of voting procedures on the specified day
 
 5. Get Average Participation of a Representative
+
    Endpoint: GET /szavazasok/kepviselo-reszvetel-atlag?kepviselo={kepviselo}&startDate={startDate}&endDate={endDate}
 
-   Response:
-   Status: 200 OK
+   Response:  
+   Status: 200 OK  
    Body: Average participation result for the specified representative within the given date range
 
 Note: In case of errors or not found situations, appropriate HTTP status codes are returned.
