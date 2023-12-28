@@ -17,6 +17,13 @@ public class VotingProcedureValidator {
         this.votingProcedureRepository = votingProcedureRepository;
     }
 
+    public boolean mezokKitoltve(VotingProcedure votingProcedure) {
+        return votingProcedure.getIdopont() != null
+                && votingProcedure.getTargy() != null
+                && votingProcedure.getTipus() != null
+                && votingProcedure.getElnok() != null;
+    }
+
     public boolean elnokSzavazott(VotingProcedure votingProcedure) {
         return votingProcedure.elnokSzavazatainakSzama() > 0;
     }

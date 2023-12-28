@@ -39,7 +39,9 @@ public class VotingProcedureService {
     public PostNewVotingResoultDTO saveVotingProcedure(VotingProcedure votingProcedure) {
         PostNewVotingResoultDTO votingResoult = new PostNewVotingResoultDTO();
 
-        if (!votingProcedureValidator.elnokSzavazott(votingProcedure)) {
+        if (!votingProcedureValidator.mezokKitoltve(votingProcedure)) {
+            votingResoult.setError("Minden mező kitöltése kötelező.");
+        } else if (!votingProcedureValidator.elnokSzavazott(votingProcedure)) {
             votingResoult.setError("Az elnöknek kötelező szavaznia.");
         } else if (!votingProcedureValidator.kepviselokEgyszerSzavaztak(votingProcedure)) {
             votingResoult.setError("Minden képviselő maximum egyszer szavazhat.");
