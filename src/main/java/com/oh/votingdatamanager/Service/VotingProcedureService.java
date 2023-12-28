@@ -83,7 +83,7 @@ public class VotingProcedureService {
         }
     }
 
-    private String calculateResoult(int kepviselokSzama, int igenekSzama) {
+    String calculateResoult(int kepviselokSzama, int igenekSzama) {
         if (kepviselokSzama == 0) {
             return "U";
         } else if (igenekSzama > kepviselokSzama / 2) {

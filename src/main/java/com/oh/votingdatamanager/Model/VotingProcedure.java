@@ -39,6 +39,26 @@ public class VotingProcedure {
         return szavazasId;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setIdopont(LocalDateTime idopont) {
+        this.idopont = idopont;
+    }
+
+    public void setTargy(String targy) {
+        this.targy = targy;
+    }
+
+    public void setTipus(VotingType tipus) {
+        this.tipus = tipus;
+    }
+
+    public void setElnok(String elnok) {
+        this.elnok = elnok;
+    }
+
     public Long getId() {
         return id;
     }
