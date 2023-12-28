@@ -19,9 +19,9 @@ The Office supports the work of parliamentary legislators, including tasks such 
 
 You can find a Postman Collection Json file in the root directory to test the endpoints. It looks like this in action:
 
-![](img/Képernyőkép 2023-12-28 225504.png)
-![](img/Képernyőkép 2023-12-28 225836.png)
-![](img/Képernyőkép 2023-12-28 225803.png)
+![](./src/main/resources/img/225504.png)
+![](./src/main/resources/img/225836.png)
+![](./src/main/resources/img/225803.png)
 
 ## Prerequisites
 
